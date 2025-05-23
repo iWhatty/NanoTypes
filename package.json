@@ -5,21 +5,26 @@
     "main": "index.js",
     "type": "module",
     "exports": {
-      ".": "./index.js"
+        ".": "./index.js"
+    },
+    "scripts": {
+        "build": "node esbuild.config.js"
     },
     "keywords": [
-      "type-checking",
-      "vanilla-js",
-      "runtime-types",
-      "tree-shakable",
-      "lightweight",
-      "jsdoc-friendly"
+        "type-checking",
+        "vanilla-js",
+        "runtime-types",
+        "tree-shakable",
+        "lightweight",
+        "jsdoc-friendly"
     ],
     "repository": {
-      "type": "git",
-      "url": "https://https://github.com/iWhatty/justTypes.git"
+        "type": "git",
+        "url": "https://github.com/iWhatty/justTypes.git"
     },
     "license": "DR.WATT v3.0",
-    "sideEffects": false
-  }
-  
+    "sideEffects": false,
+    "devDependencies": {
+        "esbuild": "^0.25.4"
+    }
+}

@@ -1,0 +1,11 @@
+# Node environment
+node_modules/
+dist/
+*.log
+package-lock.json
+
+# macOS & IDEs
+.DS_Store
+*.swp
+.idea/
+.vscode/

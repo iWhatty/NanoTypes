@@ -1,0 +1,5 @@
+test/
+.gitignore
+canvas-preview.*
+*.test.js
+package-lock.json

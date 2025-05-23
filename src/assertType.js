@@ -14,7 +14,7 @@ function assertType(value, Type) {
 
 // Dynamic generation of assertType.<type> from is.<type>
 const typesToWrap = [
-  'string', 'number', 'boolean', 'array', 'function',
+  'string', 'number', 'boolean', 'array', 'func',
   'htmlElement', 'textNode'
 ];
 

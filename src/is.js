@@ -2,10 +2,7 @@
 const DEV = typeof window !== 'undefined' && window.__DEV__ === true;
 
 /**
- * Generic type checker using instanceof.
- * @param {*} value
- * @param {Function} Type
- * @returns {boolean}
+ * Generic instanceof type checker
  */
 function is(value, Type) {
   const result = value instanceof Type;
@@ -15,20 +12,36 @@ function is(value, Type) {
   return result;
 }
 
-is.string = (x) => typeof x === 'string';
+// === Dynamic: "name → instanceof" ===
+const instanceofMap = {
+  textNode: Text,
+  element: Element,
+  htmlElement: HTMLElement,
+  inputEvent: InputEvent,
+  event: Event
+};
+
+for (const [name, Type] of Object.entries(instanceofMap)) {
+  is[name] = (x) => x instanceof Type;
+}
+
+// === Dynamic: "name → typeof" ===
+const typeofMap = {
+  string: 'string',
+  boolean: 'boolean',
+  func: 'function'
+};
+
+for (const [name, typeString] of Object.entries(typeofMap)) {
+  is[name] = (x) => typeof x === typeString;
+}
+
+// === Manual definitions for nuanced checks ===
 is.number = (x) => typeof x === 'number' && !Number.isNaN(x);
-is.boolean = (x) => typeof x === 'boolean';
-is.defined = (x) => x !== undefined && x !== null;
-is.nullish = (x) => x === undefined || x === null;
 is.array = Array.isArray;
 is.object = (x) => x && typeof x === 'object' && !Array.isArray(x);
-is.function = (x) => typeof x === 'function';
-is.textNode = (x) => x instanceof Text;
-is.element = (x) => x instanceof Element;
-is.htmlElement = (x) => x instanceof HTMLElement;
-is.inputEvent = (x) => x instanceof InputEvent;
-is.event = (x) => x instanceof Event;
-is.contentEditable = (x) =>
-  x instanceof HTMLElement && x.isContentEditable === true;
+is.defined = (x) => x !== undefined && x !== null;
+is.nullish = (x) => x === undefined || x === null;
+is.contentEditable = (x) => x instanceof HTMLElement && x.isContentEditable === true;
 
 export { is };
