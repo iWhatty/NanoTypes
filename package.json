@@ -1,0 +1,25 @@
+{
+    "name": "just-types",
+    "version": "0.0.1",
+    "description": "Minimal, runtime-safe type checks for modern Vanilla JS",
+    "main": "index.js",
+    "type": "module",
+    "exports": {
+      ".": "./index.js"
+    },
+    "keywords": [
+      "type-checking",
+      "vanilla-js",
+      "runtime-types",
+      "tree-shakable",
+      "lightweight",
+      "jsdoc-friendly"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "https://https://github.com/iWhatty/justTypes.git"
+    },
+    "license": "DR.WATT v3.0",
+    "sideEffects": false
+  }
+  
