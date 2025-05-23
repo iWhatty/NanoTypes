@@ -2,10 +2,16 @@
     "name": "just-types",
     "version": "0.0.1",
     "description": "Minimal, runtime-safe type checks for modern Vanilla JS",
-    "main": "index.js",
     "type": "module",
+    "files": ["dist/", "README.md", "LICENSE.MD"],
+    "main": "dist/index.cjs",
+    "module": "dist/index.js",
+    "types": "dist/index.d.ts",
     "exports": {
-        ".": "./index.js"
+      ".": {
+        "require": "./dist/index.cjs",
+        "import": "./dist/index.js"
+      }
     },
     "scripts": {
         "build": "node esbuild.config.js"

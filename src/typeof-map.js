@@ -12,5 +12,4 @@ export const typeofMap = {
     symbol: 'symbol',
     undefined: 'undefined',
     func: 'function',          // alias of 'function' for safe property name
-    function: 'function'       // deprecated: use is.func()
 };
