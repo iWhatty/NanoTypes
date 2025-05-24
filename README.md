@@ -27,7 +27,7 @@ npm install justypes
 ## Usage
 
 ```js
-import { is } from 'justypes';
+import { is, assertType, describe } from 'justypes';
 
 if (is.string("hello")) {
   console.log("✅ It's a string!");
@@ -40,6 +40,10 @@ if (is(someValue, HTMLElement)) {
 if (is.textNode(document.createTextNode("x"))) {
   // Safely handle
 }
+
+assertType.string("hi"); // throws if not a string
+
+console.log(describe.value(new Map())); // "Map"
 ```
 
 ---
@@ -64,22 +68,32 @@ is(42, String); // console.warn: expected String, got Number
 
 ### Specific Checks
 
-| Method                  | Description               |
-| ----------------------- | ------------------------- |
-| `is.string(x)`          | `typeof x === "string"`   |
-| `is.number(x)`          | Non-NaN number check      |
-| `is.boolean(x)`         | Boolean primitive         |
-| `is.defined(x)`         | Not `undefined` or `null` |
-| `is.nullish(x)`         | `undefined` or `null`     |
-| `is.array(x)`           | `Array.isArray(x)`        |
-| `is.object(x)`          | Plain object (not array)  |
-| `is.function(x)`        | Function check            |
-| `is.textNode(x)`        | `instanceof Text`         |
-| `is.element(x)`         | DOM `Element` node        |
-| `is.htmlElement(x)`     | DOM `HTMLElement` node    |
-| `is.inputEvent(x)`      | DOM `InputEvent` check    |
-| `is.event(x)`           | DOM `Event` base class    |
-| `is.contentEditable(x)` | Editable HTML element     |
+Examples include:
+
+| Method                    | Description                       |
+|---------------------------|-----------------------------------|
+| `is.string(x)`            | `typeof x === "string"`           |
+| `is.numberSafe(x)`        | Safe number (non-NaN) check       |
+| `is.boolean(x)`           | Boolean primitive                 |
+| `is.defined(x)`           | Not `undefined` or `null`         |
+| `is.nullish(x)`           | `undefined` or `null`             |
+| `is.array(x)`             | `Array.isArray(x)`                |
+| `is.object(x)`            | Plain object (not array)          |
+| `is.func(x)`              | Function check                    |
+| `is.textNode(x)`          | `instanceof Text`                 |
+| `is.element(x)`           | DOM `Element` node                |
+| `is.htmlElement(x)`       | DOM `HTMLElement` node            |
+| `is.inputEvent(x)`        | DOM `InputEvent` check            |
+| `is.event(x)`             | DOM `Event` base class            |
+| `is.contentEditable(x)`   | Editable HTML element             |
+| `is.positiveNumber(x)`    | number > 0                        |
+| `is.negativeNumber(x)`    | number < 0                        |
+| `is.finite(x)`            | finite number check               |
+| `is.integer(x)`           | integer check                     |
+| `is.truthy(x)`            | boolean truthiness                |
+| `is.falsy(x)`             | boolean falsiness                 |
+
+And many more — auto-inferred from `instanceof`, `typeof`, and boolean logic checks.
 
 ---
 
@@ -87,7 +101,7 @@ is(42, String); // console.warn: expected String, got Number
 
 > Make JS safer, not heavier.
 
-**justypes** gives you the essentials for runtime type checking — with no build step, no overhead, and total flexibility.
+**justTypes** gives you the essentials for runtime type checking — with no build step, no overhead, and total flexibility.
 
 ---
 
