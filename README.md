@@ -1,4 +1,10 @@
 # NanoTypes
+[![npm](https://img.shields.io/npm/v/nanotypes)](https://www.npmjs.com/package/nanotypes)
+[![gzip size](https://img.shields.io/bundlephobia/minzip/nanotypes)](https://bundlephobia.com/package/nanotypes)
+[![downloads](https://img.shields.io/npm/dw/nanotypes)](https://www.npmjs.com/package/nanotypes)
+[![GitHub stars](https://img.shields.io/github/stars/iWhatty/nanotypes?style=social)](https://github.com/iWhatty/nanotypes)
+
+
 
 **Minimal, runtime-safe type guards for modern Vanilla JS.**
 Works with zero setup, fully tree-shakable, and dev-friendly.
