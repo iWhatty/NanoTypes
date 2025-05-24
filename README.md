@@ -33,7 +33,7 @@ npm install NanoTypes
 ## Usage
 
 ```js
-import { is, assertType, describe } from 'justypes';
+import { is, assertType, describe } from 'nanotypes';
 
 if (is.string("hello")) {
   console.log("It's a string!");
@@ -47,7 +47,7 @@ if (is.textNode(document.createTextNode("x"))) {
   // Safely handle
 }
 
-assertType.string("hi"); // throws if not a string
+assertType.string("hi"); // throws error if not a string
 
 console.log(describe.value(new Map())); // "Map"
 ```
@@ -73,8 +73,6 @@ is(42, String); // console.warn: expected String, got Number
 ---
 
 ### Specific Checks
-
-Examples include:
 
 | Method                    | Description                       |
 |---------------------------|-----------------------------------|
