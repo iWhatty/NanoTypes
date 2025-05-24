@@ -10,7 +10,7 @@ const shared = {
   bundle: true,
   minify: true,
   sourcemap: false,
-  target: 'es2017',
+  target: 'es2022',
 };
 
 // Create dist/ if it doesn't exist
@@ -23,12 +23,12 @@ await build({
   outfile: 'dist/index.js',
 });
 
-// CJS output
-await build({
-  ...shared,
-  format: 'cjs',
-  outfile: 'dist/index.cjs',
-});
+// CJS output -- dropping .cjs support for now
+// await build({
+//   ...shared,
+//   format: 'cjs',
+//   outfile: 'dist/index.cjs',
+// });
 
 // Copy index.d.ts manually
 cpSync(`${__dirname}/src/index.d.ts`, `${__dirname}/dist/index.d.ts`);
