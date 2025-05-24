@@ -29,10 +29,37 @@ for (const [name, typeString] of Object.entries(typeofMap)) {
 // === Manual Guards ===
 is.numberSafe = (x) => typeof x === 'number' && !Number.isNaN(x);
 is.array = (x) => Array.isArray(x);
-is.object = (x) => x && typeof x === 'object' && !Array.isArray(x);
 is.defined = (x) => x !== undefined && x !== null;
 is.nullish = (x) => x === undefined || x === null;
+is.nil = (x) => x === null;
 is.contentEditable = (x) => x instanceof HTMLElement && x.isContentEditable === true;
+
+
+// Basic object check: excludes null and arrays.
+// Matches most non-null object-like values (including class instances, DOM nodes, etc.)
+// Does not check prototype or class — good default for general use.
+is.object = (x) => x && typeof x === 'object' && !Array.isArray(x);
+
+// Stricter check: only matches plain Object instances (`{}`)
+// Uses internal [[Class]] tag to confirm it's exactly `[object Object]`.
+// Excludes things like Date, Map, DOM elements, etc.
+is.objectStrict = (x) => Object.prototype.toString.call(x) === '[object Object]';
+
+// POJO check: plain object with prototype of `Object` or `null`
+// Excludes custom class instances, objects with modified prototypes, etc.
+// Great for validating data structures, JSON payloads, configs, etc.
+is.plainObject = (x) =>
+  is.objectStrict(x) &&
+  (Object.getPrototypeOf(x) === Object.prototype || Object.getPrototypeOf(x) === null);
+
+// Alias for plainObject — ergonomic shorthand used in some communities.
+is.pojo = is.plainObject;
+
+// Loose object check: includes arrays, objects, and non-null values.
+// Does NOT exclude arrays or special object types — very permissive.
+// Useful for general reflection or fallback behavior (not validation).
+is.objectLoose = (x) => typeof x === 'object' && x !== null;
+
 
 
 // === Derived Boolean Checks ===

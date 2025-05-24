@@ -17,7 +17,8 @@
         }
     },
     "scripts": {
-        "build": "node esbuild.config.js"
+        "build": "node esbuild.config.js",
+        "test": "node ./test/smokeTest.js"
     },
     "keywords": [
         "type-checking",

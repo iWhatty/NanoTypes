@@ -1,34 +1,34 @@
 # NanoTypes
+
 [![npm](https://img.shields.io/npm/v/nanotypes)](https://www.npmjs.com/package/nanotypes)
 [![gzip size](https://img.shields.io/bundlephobia/minzip/nanotypes)](https://bundlephobia.com/package/nanotypes)
 [![downloads](https://img.shields.io/npm/dw/nanotypes)](https://www.npmjs.com/package/nanotypes)
 [![GitHub stars](https://img.shields.io/github/stars/iWhatty/nanotypes?style=social)](https://github.com/iWhatty/nanotypes)
 
+**Minimal, runtime-safe type guards for modern JavaScript.**
 
+Tree-shakable, zero-config, developer-friendly guards for `typeof`, `instanceof`, and structural checks.
 
-**Minimal, runtime-safe type guards for modern Vanilla JS.**
-Works with zero setup, fully tree-shakable, and dev-friendly.
-
-* Minified: (2.22 KB)
-* Gzipped: (1.17 KB)
+* **Minified:** \~2.5 KB
+* **Gzipped:** \~1.3 KB
 
 ---
 
 ## Features
 
-*  Runtime-safe `instanceof` and `typeof` checks
+*  Runtime-safe `typeof` and `instanceof` matching
+*  Dynamic support for global constructors (`Map`, `URL`, etc.)
 *  Dev-only logging with `window.__DEV__`
-*  Zero dependencies
-*  Fully tree-shakable
-*  JSDoc + IntelliSense ready
-*  Works in any modern JS environment
+*  Auto-generated `assertType.*` versions
+*  No dependencies
+*  Works in any modern JS runtime (Node, browser, workers)
 
 ---
 
 ## Install
 
 ```bash
-npm install NanoTypes
+npm install nanotypes
 ```
 
 ---
@@ -47,10 +47,10 @@ if (is(someValue, HTMLElement)) {
 }
 
 if (is.textNode(document.createTextNode("x"))) {
-  // Safely handle
+  // Safe to access nodeValue, etc.
 }
 
-assertType.string("hi"); // throws error if not a string
+assertType.promise(Promise.resolve()); // throws TypeError if invalid
 
 console.log(describe.value(new Map())); // "Map"
 ```
@@ -61,57 +61,60 @@ console.log(describe.value(new Map())); // "Map"
 
 ### Generic Matcher
 
-```js
+```ts
 is(value, Class)
 ```
 
-* Uses `instanceof` under the hood
-* Logs a warning in dev mode if the type mismatches
+* Uses `instanceof` internally
+* Logs warning in dev if mismatched (via `window.__DEV__ = true`)
 
-```js
-window.__DEV__ = true;
-is(42, String); // console.warn: expected String, got Number
+### Type-Specific Guards
+
+Over 60 guards are exposed automatically:
+
+| Guard                   | Description                              |
+| ----------------------- | ---------------------------------------- |
+| `is.string(x)`          | `typeof x === "string"`                  |
+| `is.numberSafe(x)`      | Safe number (non-NaN)                    |
+| `is.boolean(x)`         | Boolean primitive                        |
+| `is.defined(x)`         | Not `null` or `undefined`                |
+| `is.nullish(x)`         | `null` or `undefined`                    |
+| `is.array(x)`           | Array literal check                      |
+| `is.object(x)`          | Non-null object, not array               |
+| `is.objectStrict(x)`    | Exactly a `{}` object                    |
+| `is.plainObject(x)`     | Object with prototype `Object` or `null` |
+| `is.func(x)`            | Function check                           |
+| `is.map(x)`             | Instance of `Map`                        |
+| `is.date(x)`            | Instance of `Date`                       |
+| `is.error(x)`           | Instance of `Error`                      |
+| `is.textNode(x)`        | DOM Text node                            |
+| `is.htmlElement(x)`     | `HTMLElement` node                       |
+| `is.contentEditable(x)` | Editable DOM node                        |
+| `is.positiveNumber(x)`  | Greater than 0                           |
+| `is.negativeNumber(x)`  | Less than 0                              |
+| `is.integer(x)`         | Whole number                             |
+| `is.finite(x)`          | Not `Infinity`, not `NaN`                |
+| `is.truthy(x)`          | Coerces to `true`                        |
+| `is.falsy(x)`           | Coerces to `false`                       |
+
+### Assertive Guards
+
+All `is.*` functions have an `assertType.*` equivalent:
+
+```ts
+assertType.url(x) // throws TypeError if not a URL
 ```
-
----
-
-### Specific Checks
-
-| Method                    | Description                       |
-|---------------------------|-----------------------------------|
-| `is.string(x)`            | `typeof x === "string"`           |
-| `is.numberSafe(x)`        | Safe number (non-NaN) check       |
-| `is.boolean(x)`           | Boolean primitive                 |
-| `is.defined(x)`           | Not `undefined` or `null`         |
-| `is.nullish(x)`           | `undefined` or `null`             |
-| `is.array(x)`             | `Array.isArray(x)`                |
-| `is.object(x)`            | Plain object (not array)          |
-| `is.func(x)`              | Function check                    |
-| `is.textNode(x)`          | `instanceof Text`                 |
-| `is.element(x)`           | DOM `Element` node                |
-| `is.htmlElement(x)`       | DOM `HTMLElement` node            |
-| `is.inputEvent(x)`        | DOM `InputEvent` check            |
-| `is.event(x)`             | DOM `Event` base class            |
-| `is.contentEditable(x)`   | Editable HTML element             |
-| `is.positiveNumber(x)`    | number > 0                        |
-| `is.negativeNumber(x)`    | number < 0                        |
-| `is.finite(x)`            | finite number check               |
-| `is.integer(x)`           | integer check                     |
-| `is.truthy(x)`            | boolean truthiness                |
-| `is.falsy(x)`             | boolean falsiness                 |
-
-And many more — auto-inferred from `instanceof`, `typeof`, and boolean logic checks.
 
 ---
 
 ## Philosophy
 
-Make JS safer, not heavier.
+**Make JavaScript safer without making it heavier.**
 
-**NanoTypes** gives you the essentials for runtime type checking — with no build step, no overhead, and total flexibility.
+NanoTypes avoids boilerplate and unnecessary runtime bloat. Just clean, modern type guards ready for anything from browser UIs to CLI tools.
 
 ---
 
 ## License
 
-\--{DR.WATT v3.0}--
+**DR.WATT v3.0**

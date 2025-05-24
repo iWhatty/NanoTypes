@@ -60,10 +60,17 @@ export namespace is {
   // manual guards
   function numberSafe(x: unknown): x is number;
   function array(x: unknown): x is any[];
-  function object(x: unknown): x is Record<string, any>;
+
   function defined<T>(x: T | null | undefined): x is T;
   function nullish(x: unknown): x is null | undefined;
+  function nil(x: unknown): x is null;
   function contentEditable(x: unknown): x is HTMLElement;
+
+  function object(x: unknown): x is Record<string, any>;
+  function objectStrict(x: unknown): x is Record<string, unknown>;
+  function plainObject(x: unknown): x is Record<string, unknown>;
+  function pojo(x: unknown): x is Record<string, unknown>;
+  function objectLoose(x: unknown): x is object;
 
   // derived value checks
   function truthy(x: unknown): boolean;
@@ -91,6 +98,13 @@ export namespace assertType {
   function object(x: unknown): asserts x is Record<string, any>;
   function defined<T>(x: T | null | undefined): asserts x is T;
   function nullish(x: unknown): asserts x is null | undefined;
+  function nil(x: unknown): asserts x is null;
+  function contentEditable(x: unknown): asserts x is HTMLElement;
+
+  function objectStrict(x: unknown): asserts x is Record<string, unknown>;
+  function plainObject(x: unknown): asserts x is Record<string, unknown>;
+  function pojo(x: unknown): asserts x is Record<string, unknown>;
+  function objectLoose(x: unknown): asserts x is object;
 
   function promise(x: unknown): asserts x is Promise<any>;
   function date(x: unknown): asserts x is Date;
@@ -98,6 +112,8 @@ export namespace assertType {
 
   function truthy(x: unknown): asserts x is boolean;
   function falsy(x: unknown): asserts x is boolean;
+  function emptyString(x: unknown): asserts x is '';
+  function nonEmptyString(x: unknown): asserts x is string;
   function positiveNumber(x: unknown): asserts x is number;
   function negativeNumber(x: unknown): asserts x is number;
   function integer(x: unknown): asserts x is number;
