@@ -1,6 +1,6 @@
 {
     "name": "nanotypes",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Minimal, runtime-safe type checks for modern Vanilla JS",
     "type": "module",
     "files": ["dist/", "README.md", "LICENSE.MD"],

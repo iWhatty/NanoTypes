@@ -13,19 +13,19 @@ Works with zero setup, fully tree-shakable, and dev-friendly.
 
 ## Features
 
-* ✅ Runtime-safe `instanceof` and `typeof` checks
-* ✅ Dev-only logging with `window.__DEV__`
-* ✅ Zero dependencies
-* ✅ Fully tree-shakable
-* ✅ JSDoc + IntelliSense ready
-* ✅ Works in any modern JS environment
+*  Runtime-safe `instanceof` and `typeof` checks
+*  Dev-only logging with `window.__DEV__`
+*  Zero dependencies
+*  Fully tree-shakable
+*  JSDoc + IntelliSense ready
+*  Works in any modern JS environment
 
 ---
 
 ## Install
 
 ```bash
-npm install justypes
+npm install NanoTypes
 ```
 
 ---
@@ -36,7 +36,7 @@ npm install justypes
 import { is, assertType, describe } from 'justypes';
 
 if (is.string("hello")) {
-  console.log("✅ It's a string!");
+  console.log("It's a string!");
 }
 
 if (is(someValue, HTMLElement)) {
@@ -105,7 +105,7 @@ And many more — auto-inferred from `instanceof`, `typeof`, and boolean logic c
 
 ## Philosophy
 
-> Make JS safer, not heavier.
+Make JS safer, not heavier.
 
 **NanoTypes** gives you the essentials for runtime type checking — with no build step, no overhead, and total flexibility.
 
@@ -114,4 +114,3 @@ And many more — auto-inferred from `instanceof`, `typeof`, and boolean logic c
 ## License
 
 \--{DR.WATT v3.0}--
-npm pp
