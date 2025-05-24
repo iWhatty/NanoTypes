@@ -9,6 +9,9 @@
 **Minimal, runtime-safe type guards for modern Vanilla JS.**
 Works with zero setup, fully tree-shakable, and dev-friendly.
 
+* Minified: (2.22 KB)
+* Gzipped: (1.17 KB)
+
 ---
 
 ## Features
