@@ -1,4 +1,4 @@
-# justTypes
+# NanoTypes
 
 **Minimal, runtime-safe type guards for modern Vanilla JS.**
 Works with zero setup, fully tree-shakable, and dev-friendly.
@@ -101,10 +101,11 @@ And many more — auto-inferred from `instanceof`, `typeof`, and boolean logic c
 
 > Make JS safer, not heavier.
 
-**justTypes** gives you the essentials for runtime type checking — with no build step, no overhead, and total flexibility.
+**NanoTypes** gives you the essentials for runtime type checking — with no build step, no overhead, and total flexibility.
 
 ---
 
 ## License
 
 \--{DR.WATT v3.0}--
+npm pp

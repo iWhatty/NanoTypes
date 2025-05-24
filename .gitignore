@@ -3,6 +3,7 @@ node_modules/
 dist/
 *.log
 package-lock.json
+*.tgz
 
 # macOS & IDEs
 .DS_Store
