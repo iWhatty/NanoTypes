@@ -5,8 +5,6 @@ import { describe } from './describe.js';
 const DEV = typeof window !== 'undefined' && window.__DEV__ === true;
 
 
-
-
 /**
  * Throws if value does not match given constructor
  * @param {*} value
