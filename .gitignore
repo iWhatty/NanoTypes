@@ -10,3 +10,6 @@ package-lock.json
 *.swp
 .idea/
 .vscode/
+
+context-js.bat
+context.txt

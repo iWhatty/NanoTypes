@@ -3,18 +3,32 @@
 import { instanceofMap } from './instanceof-map.js';
 import { typeofMap } from './typeof-map.js';
 
-const DEV = typeof window !== 'undefined' && window.__DEV__ === true;
+const DEV =
+    (typeof globalThis !== "undefined" && globalThis.__DEV__ === true) ||
+    (typeof process !== "undefined" && process.env?.NODE_ENV !== "production");
+
 
 /**
  * Generic instanceof type checker
  */
 function is(value, Type) {
-    const result = value instanceof Type;
-    if (!result && DEV) {
-        console.warn(`Expected ${Type.name}, got ${value?.constructor?.name || typeof value}`, value);
+    if (typeof Type !== "function") {
+        if (DEV) console.warn(`Expected constructor function, got ${typeof Type}`, Type);
+        return false;
     }
-    return result;
+
+    try {
+        const result = value instanceof Type;
+        if (!result && DEV) {
+            console.warn(`Expected ${Type.name}, got ${value?.constructor?.name || typeof value}`, value);
+        }
+        return result;
+    } catch (err) {
+        if (DEV) console.warn(`instanceof check failed for ${Type?.name ?? "<unknown>"}`, err);
+        return false;
+    }
 }
+
 
 // === Core instanceof Guards ===
 for (const [name, Type] of Object.entries(instanceofMap)) {
@@ -32,7 +46,10 @@ is.array = (x) => Array.isArray(x);
 is.defined = (x) => x !== undefined && x !== null;
 is.nullish = (x) => x === undefined || x === null;
 is.nil = (x) => x === null;
-is.contentEditable = (x) => x instanceof HTMLElement && x.isContentEditable === true;
+
+const hasHTMLElement = typeof HTMLElement !== "undefined";
+
+is.contentEditable = (x) => hasHTMLElement && x instanceof HTMLElement && x.isContentEditable === true;
 
 
 // Basic object check: excludes null and arrays.
@@ -48,9 +65,11 @@ is.objectStrict = (x) => Object.prototype.toString.call(x) === '[object Object]'
 // POJO check: plain object with prototype of `Object` or `null`
 // Excludes custom class instances, objects with modified prototypes, etc.
 // Great for validating data structures, JSON payloads, configs, etc.
-is.plainObject = (x) =>
-  is.objectStrict(x) &&
-  (Object.getPrototypeOf(x) === Object.prototype || Object.getPrototypeOf(x) === null);
+is.plainObject = (x) => {
+    if (!is.objectStrict(x)) return false;
+    const proto = Object.getPrototypeOf(x);
+    return proto === Object.prototype || proto === null;
+};
 
 // Alias for plainObject — ergonomic shorthand used in some communities.
 is.pojo = is.plainObject;

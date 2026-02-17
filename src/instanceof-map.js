@@ -33,11 +33,15 @@ function formatKey(name) {
   return aliasMap[name] || name[0].toLowerCase() + name.slice(1);
 }
 
-function generateInstanceofMap() {
+function safeGet(obj, key) {
+  try { return obj[key]; } catch { return undefined; }
+}
+
+export function generateInstanceofMap() {
 
   const entries = Reflect.ownKeys(globalThis)
-    .map((key) => [key, globalThis[key]])
-    .filter(([key]) => typeof key === 'string') // only string keys
+    .filter((k) => typeof k === "string")
+    .map((k) => [k, safeGet(globalThis, k)])
     .filter(isValidInstanceofType)
     .map(([name, ctor]) => [formatKey(name), ctor]);
 
