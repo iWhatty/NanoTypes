@@ -7,21 +7,34 @@
 
 **Minimal, runtime-safe type guards for modern JavaScript.**
 
-Tree-shakable, zero-config, developer-friendly guards for `typeof`, `instanceof`, and structural checks.
+Tree-shakable ESM bundle, zero-config, developer-friendly guards for `typeof`, `instanceof`, and structural checks.
 
-* **Minified:** \~2.5 KB
-* **Gzipped:** \~1.3 KB
+* **Minified:** ~2.5 KB
+* **Gzipped:** ~1.3 KB
 
 ---
 
 ## Features
 
-*  Runtime-safe `typeof` and `instanceof` matching
-*  Dynamic support for global constructors (`Map`, `URL`, etc.)
-*  Dev-only logging with `window.__DEV__`
-*  Auto-generated `assertType.*` versions
-*  No dependencies
-*  Works in any modern JS runtime (Node, browser, workers)
+* Runtime-safe `typeof` and `instanceof` matching
+* Dynamic support for global constructors (`Map`, `URL`, etc.)
+* Safe in Node, browsers, and workers (no browser-global crashes)
+* Non-throwing `instanceof` checks (runtime hardened)
+* Dev-only logging via `globalThis.__DEV__` or `NODE_ENV !== "production"`
+* Auto-generated `assertType.*` versions
+* No dependencies
+* Works in any modern JS runtime (Node, browser, workers, edge)
+
+---
+
+## Runtime Safety
+
+NanoTypes is hardened for modern environments:
+
+* Safe access of `globalThis` constructors
+* No crashes from missing browser globals (e.g., `HTMLElement` in Node)
+* Defensive `instanceof` handling
+* Works consistently across Node, browsers, workers, and edge runtimes
 
 ---
 
@@ -66,7 +79,10 @@ is(value, Class)
 ```
 
 * Uses `instanceof` internally
-* Logs warning in dev if mismatched (via `window.__DEV__ = true`)
+* Logs warnings in development (`globalThis.__DEV__ = true` or when `process.env.NODE_ENV !== "production"`)
+* Never throws — safely returns `false` on invalid constructor input
+
+---
 
 ### Type-Specific Guards
 
@@ -97,6 +113,8 @@ Over 60 guards are exposed automatically:
 | `is.truthy(x)`          | Coerces to `true`                        |
 | `is.falsy(x)`           | Coerces to `false`                       |
 
+---
+
 ### Assertive Guards
 
 All `is.*` functions have an `assertType.*` equivalent:
@@ -112,6 +130,15 @@ assertType.url(x) // throws TypeError if not a URL
 **Make JavaScript safer without making it heavier.**
 
 NanoTypes avoids boilerplate and unnecessary runtime bloat. Just clean, modern type guards ready for anything from browser UIs to CLI tools.
+
+---
+
+## 0.0.8
+
+* Hardened cross-runtime safety
+* Safe global constructor detection
+* Improved development-mode detection
+* Optimized bundled distribution for faster Node imports
 
 ---
 
