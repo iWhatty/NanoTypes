@@ -125,12 +125,12 @@ Some guards may only exist when the constructor exists in that environment
 | Guard                             | Description                              |
 | --------------------------------- | ---------------------------------------- |
 | `is.string(x)` / `is.str(x)`      | `typeof x === "string"`                  |
-| `is.number(x)` / `is.num(x)`      | `typeof x === "number"`                  |
+| `is.number(x)` / `is.num(x)`      | `typeof x === "number"` (includes `NaN`) |
+| `is.numberSafe(x)`                | Number and not `NaN`                     |
 | `is.boolean(x)` / `is.bool(x)`    | Boolean primitive                        |
 | `is.bigint(x)` / `is.bigi(x)`     | BigInt primitive                         |
 | `is.symbol(x)` / `is.sym(x)`      | Symbol primitive                         |
 | `is.undefined(x)` / `is.undef(x)` | Strictly `undefined`                     |
-| `is.numberSafe(x)`                | Safe number (non-NaN)                    |
 | `is.defined(x)`                   | Not `null` or `undefined`                |
 | `is.nullish(x)`                   | `null` or `undefined`                    |
 | `is.nil(x)`                       | Strictly `null`                          |
@@ -151,6 +151,10 @@ Some guards may only exist when the constructor exists in that environment
 | `is.finite(x)`                    | Not `Infinity`, not `NaN`                |
 | `is.truthy(x)`                    | Coerces to `true`                        |
 | `is.falsy(x)`                     | Coerces to `false`                       |
+
+> ⚠️ **Note**
+> `is.number(x)` follows standard JavaScript semantics and returns `true` for `NaN`.
+> Use `is.numberSafe(x)` if you require a numeric value that is not `NaN`.
 
 ---
 
@@ -213,7 +217,9 @@ NanoTypes avoids boilerplate and unnecessary runtime bloat. Just clean, modern t
 * Ensured all guards return strict booleans
 * Production freezing of `is`, `assertType`, and `describe`
 * Hardened `Intl` constructor detection
+* Excluded `BigInt` constructor to prevent primitive naming confusion
 * Added primitive shorthand guards (`str`, `num`, `bool`, `bigi`, `sym`, `undef`)
+* Improved smoke testing with negative cases and CI-friendly exit codes
 
 ---
 
