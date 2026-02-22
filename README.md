@@ -18,12 +18,28 @@ Tree-shakable ESM bundle, zero-config, developer-friendly guards for `typeof`, `
 
 * Runtime-safe `typeof` and `instanceof` matching
 * Dynamic support for global constructors (`Map`, `URL`, etc.)
-* Safe in Node, browsers, and workers (no browser-global crashes)
+* Safe in Node, browsers, workers, and edge runtimes
 * Non-throwing `instanceof` checks (runtime hardened)
-* Dev-only logging via `globalThis.__DEV__` or `NODE_ENV !== "production"`
+* All guards return strict booleans (`true | false`)
+* Production-hardened: exported APIs are frozen in production
+* Shared DEV detection via `globalThis.__DEV__` or `NODE_ENV !== "production"`
 * Auto-generated `assertType.*` versions
+* Primitive shorthands: `is.str`, `is.num`, `is.bool`, `is.bigi`, `is.sym`, `is.undef`
 * No dependencies
-* Works in any modern JS runtime (Node, browser, workers, edge)
+
+---
+
+## Why NanoTypes?
+
+JavaScript type checks are deceptively inconsistent:
+
+* `typeof null === "object"`
+* `Array.isArray(x)` is required for arrays
+* `instanceof` can throw in exotic or cross-realm scenarios
+* Browser globals like `HTMLElement` don’t exist in Node
+* Guards scattered across codebases lead to inconsistency
+
+NanoTypes centralizes and hardens these checks into a small, predictable surface.
 
 ---
 
@@ -35,6 +51,21 @@ NanoTypes is hardened for modern environments:
 * No crashes from missing browser globals (e.g., `HTMLElement` in Node)
 * Defensive `instanceof` handling
 * Works consistently across Node, browsers, workers, and edge runtimes
+* Guards never throw — they return `false`
+* Assertions throw clean `TypeError` messages with readable descriptions
+
+---
+
+## Design Principles
+
+* Guards **never throw**
+* Asserts **throw intentionally** (`TypeError`)
+* No runtime assumptions
+* Safe reflection on `globalThis`
+* Runtime-adaptive constructor support
+* Tree-shakable ESM surface
+* Zero dependencies
+* Immutable public API in production
 
 ---
 
@@ -55,12 +86,13 @@ if (is.string("hello")) {
   console.log("It's a string!");
 }
 
-if (is(someValue, HTMLElement)) {
-  someValue.focus();
+// Shorthand aliases
+if (is.str("hello")) {
+  console.log("Short and sweet.");
 }
 
-if (is.textNode(document.createTextNode("x"))) {
-  // Safe to access nodeValue, etc.
+if (is(someValue, HTMLElement)) {
+  someValue.focus();
 }
 
 assertType.promise(Promise.resolve()); // throws TypeError if invalid
@@ -86,32 +118,39 @@ is(value, Class)
 
 ### Type-Specific Guards
 
-Over 60 guards are exposed automatically:
+Guards are generated dynamically from available runtime constructors.
+Some guards may only exist when the constructor exists in that environment
+(e.g., DOM-related guards in browsers but not in Node).
 
-| Guard                   | Description                              |
-| ----------------------- | ---------------------------------------- |
-| `is.string(x)`          | `typeof x === "string"`                  |
-| `is.numberSafe(x)`      | Safe number (non-NaN)                    |
-| `is.boolean(x)`         | Boolean primitive                        |
-| `is.defined(x)`         | Not `null` or `undefined`                |
-| `is.nullish(x)`         | `null` or `undefined`                    |
-| `is.array(x)`           | Array literal check                      |
-| `is.object(x)`          | Non-null object, not array               |
-| `is.objectStrict(x)`    | Exactly a `{}` object                    |
-| `is.plainObject(x)`     | Object with prototype `Object` or `null` |
-| `is.func(x)`            | Function check                           |
-| `is.map(x)`             | Instance of `Map`                        |
-| `is.date(x)`            | Instance of `Date`                       |
-| `is.error(x)`           | Instance of `Error`                      |
-| `is.textNode(x)`        | DOM Text node                            |
-| `is.htmlElement(x)`     | `HTMLElement` node                       |
-| `is.contentEditable(x)` | Editable DOM node                        |
-| `is.positiveNumber(x)`  | Greater than 0                           |
-| `is.negativeNumber(x)`  | Less than 0                              |
-| `is.integer(x)`         | Whole number                             |
-| `is.finite(x)`          | Not `Infinity`, not `NaN`                |
-| `is.truthy(x)`          | Coerces to `true`                        |
-| `is.falsy(x)`           | Coerces to `false`                       |
+| Guard                             | Description                              |
+| --------------------------------- | ---------------------------------------- |
+| `is.string(x)` / `is.str(x)`      | `typeof x === "string"`                  |
+| `is.number(x)` / `is.num(x)`      | `typeof x === "number"`                  |
+| `is.boolean(x)` / `is.bool(x)`    | Boolean primitive                        |
+| `is.bigint(x)` / `is.bigi(x)`     | BigInt primitive                         |
+| `is.symbol(x)` / `is.sym(x)`      | Symbol primitive                         |
+| `is.undefined(x)` / `is.undef(x)` | Strictly `undefined`                     |
+| `is.numberSafe(x)`                | Safe number (non-NaN)                    |
+| `is.defined(x)`                   | Not `null` or `undefined`                |
+| `is.nullish(x)`                   | `null` or `undefined`                    |
+| `is.nil(x)`                       | Strictly `null`                          |
+| `is.array(x)`                     | Array literal check                      |
+| `is.object(x)`                    | Non-null object, not array               |
+| `is.objectStrict(x)`              | Exactly a `{}` object                    |
+| `is.plainObject(x)`               | Object with prototype `Object` or `null` |
+| `is.func(x)`                      | Function check                           |
+| `is.map(x)`                       | Instance of `Map`                        |
+| `is.date(x)`                      | Instance of `Date`                       |
+| `is.error(x)`                     | Instance of `Error`                      |
+| `is.textNode(x)`                  | DOM Text node (browser only)             |
+| `is.htmlElement(x)`               | `HTMLElement` node (browser only)        |
+| `is.contentEditable(x)`           | Editable DOM node                        |
+| `is.positiveNumber(x)`            | Greater than 0                           |
+| `is.negativeNumber(x)`            | Less than 0                              |
+| `is.integer(x)`                   | Whole number                             |
+| `is.finite(x)`                    | Not `Infinity`, not `NaN`                |
+| `is.truthy(x)`                    | Coerces to `true`                        |
+| `is.falsy(x)`                     | Coerces to `false`                       |
 
 ---
 
@@ -123,6 +162,40 @@ All `is.*` functions have an `assertType.*` equivalent:
 assertType.url(x) // throws TypeError if not a URL
 ```
 
+Use guards for conditional logic.
+Use asserts when invalid input should immediately fail.
+
+---
+
+## Runtime-Adaptive Behavior
+
+NanoTypes dynamically inspects `globalThis` to expose constructor-based guards.
+
+This means:
+
+* Browser-only constructors (like `HTMLElement`) will not exist in Node.
+* New runtime constructors may automatically become available.
+
+If writing universal libraries, you can safely check:
+
+```js
+if (typeof is.htmlElement === 'function' && is.htmlElement(node)) {
+  // browser-only logic
+}
+```
+
+---
+
+## When NOT to Use NanoTypes
+
+NanoTypes may not be necessary if:
+
+* You use strict TypeScript and never validate unknown runtime input.
+* You only need one or two inline type checks.
+* You are already using a schema validation library (e.g., Zod, Valibot, Yup).
+
+NanoTypes is designed as a lightweight guard layer — not a schema system.
+
 ---
 
 ## Philosophy
@@ -133,12 +206,14 @@ NanoTypes avoids boilerplate and unnecessary runtime bloat. Just clean, modern t
 
 ---
 
-## 0.0.8
+## Latest Changes
 
-* Hardened cross-runtime safety
-* Safe global constructor detection
-* Improved development-mode detection
-* Optimized bundled distribution for faster Node imports
+* Centralized DEV detection via `env.js`
+* Reused safe core for all generated `instanceof` guards
+* Ensured all guards return strict booleans
+* Production freezing of `is`, `assertType`, and `describe`
+* Hardened `Intl` constructor detection
+* Added primitive shorthand guards (`str`, `num`, `bool`, `bigi`, `sym`, `undef`)
 
 ---
 
