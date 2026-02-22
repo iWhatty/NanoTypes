@@ -6,7 +6,16 @@
 
 
 // Keys to exclude when checking isValidInstanceofType
-const denylist = new Set(['Function', 'Object', 'Symbol', 'Math', 'JSON', 'Reflect', 'Crypto']);
+const denylist = new Set([
+  'Function',
+  'Object',
+  'Symbol',
+  'Math',
+  'JSON',
+  'Reflect',
+  'Crypto',
+  'BigInt', // avoid confusion with primitive `bigint`
+]);
 
 function isValidInstanceofType([key, val]) {
   return (
@@ -30,7 +39,16 @@ export const aliasMap = {
 };
 
 function formatKey(name) {
-  return aliasMap[name] || name[0].toLowerCase() + name.slice(1);
+  if (aliasMap[name]) return aliasMap[name];
+
+  // Handle initialisms like URLPattern -> urlPattern, XMLHttpRequest -> xmlHttpRequest
+  const m = name.match(/^[A-Z]+(?=[A-Z][a-z])/);
+  if (m) {
+    const head = m[0].toLowerCase();
+    return head + name.slice(m[0].length);
+  }
+
+  return name[0].toLowerCase() + name.slice(1);
 }
 
 function safeGet(obj, key) {
