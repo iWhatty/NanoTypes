@@ -2,10 +2,8 @@
 
 import { instanceofMap } from './instanceof-map.js';
 import { typeofMap } from './typeof-map.js';
+import { DEV } from './env.js';
 
-const DEV =
-    (typeof globalThis !== "undefined" && globalThis.__DEV__ === true) ||
-    (typeof process !== "undefined" && process.env?.NODE_ENV !== "production");
 
 
 /**
@@ -32,7 +30,8 @@ function is(value, Type) {
 
 // === Core instanceof Guards ===
 for (const [name, Type] of Object.entries(instanceofMap)) {
-    is[name] = (x) => x instanceof Type;
+    // Reuse the safe core: consistent dev logging + try/catch hardening
+    is[name] = (x) => is(x, Type);
 }
 
 // === Core typeof Guards ===
@@ -49,13 +48,13 @@ is.nil = (x) => x === null;
 
 const hasHTMLElement = typeof HTMLElement !== "undefined";
 
-is.contentEditable = (x) => hasHTMLElement && x instanceof HTMLElement && x.isContentEditable === true;
+is.contentEditable = (x) => !!(hasHTMLElement && x instanceof HTMLElement && x.isContentEditable === true);
 
 
 // Basic object check: excludes null and arrays.
 // Matches most non-null object-like values (including class instances, DOM nodes, etc.)
 // Does not check prototype or class — good default for general use.
-is.object = (x) => x && typeof x === 'object' && !Array.isArray(x);
+is.object = (x) => !!(x && typeof x === "object" && !Array.isArray(x));
 
 // Stricter check: only matches plain Object instances (`{}`)
 // Uses internal [[Class]] tag to confirm it's exactly `[object Object]`.
@@ -95,6 +94,6 @@ const basicChecks = {
 
 Object.assign(is, basicChecks);
 
-
+if (!DEV) Object.freeze(is);
 
 export { is };

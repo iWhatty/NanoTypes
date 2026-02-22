@@ -2,7 +2,8 @@
 import { is } from './is.js';
 import { describe } from './describe.js';
 
-const DEV = typeof window !== 'undefined' && window.__DEV__ === true;
+import { DEV } from './env.js';
+
 
 
 /**
@@ -23,10 +24,12 @@ const skipKeys = new Set(['length', 'name', 'prototype', 'default', '__proto__']
 // Dynamic generation of assertType.<type> for every is.<type>
 for (const key of Object.keys(is)) {
     if (skipKeys.has(key)) continue;
-    if (typeof is[key] !== 'function') continue;
+
+    const guard = is[key];
+    if (typeof guard !== 'function') continue;
 
     assertType[key] = (x) => {
-        if (!is[key](x)) {
+        if (!Boolean(guard(x))) {
             throw new TypeError(`Expected ${key}, got ${describe.value(x)}`);
         }
     };

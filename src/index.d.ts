@@ -1,4 +1,4 @@
-// index.d.ts
+// ./src/index.d.ts
 
 // === Generic Guards ===
 export function is<T>(x: unknown, constructor: new (...args: any[]) => T): x is T;

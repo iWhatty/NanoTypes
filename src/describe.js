@@ -1,4 +1,7 @@
-// src/describe.js
+// ./src/describe.js
+
+import { DEV } from './env.js';
+
 
 /**
  * Provides human-readable descriptions of JS values.
@@ -20,3 +23,6 @@ export const describe = {
     return typeof x;
   }
 };
+
+
+if (!DEV) Object.freeze(describe);

@@ -46,10 +46,10 @@ export function generateInstanceofMap() {
     .map(([name, ctor]) => [formatKey(name), ctor]);
 
   // include nested Intl types
-  if (typeof Intl === 'object') {
-    entries.push(['intlDateTimeFormat', Intl.DateTimeFormat]);
-    entries.push(['intlNumberFormat', Intl.NumberFormat]);
-    entries.push(['intlCollator', Intl.Collator]);
+  if (typeof Intl === 'object' && Intl) {
+    if (typeof Intl.DateTimeFormat === 'function') entries.push(['intlDateTimeFormat', Intl.DateTimeFormat]);
+    if (typeof Intl.NumberFormat === 'function') entries.push(['intlNumberFormat', Intl.NumberFormat]);
+    if (typeof Intl.Collator === 'function') entries.push(['intlCollator', Intl.Collator]);
   }
 
   return Object.fromEntries(entries);
