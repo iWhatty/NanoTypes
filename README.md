@@ -25,6 +25,7 @@ Tree-shakable ESM bundle, zero-config, developer-friendly guards for `typeof`, `
 * Shared DEV detection via `globalThis.__DEV__` or `NODE_ENV !== "production"`
 * Auto-generated `assertType.*` versions
 * Primitive shorthands: `is.str`, `is.num`, `is.bool`, `is.bigi`, `is.sym`, `is.undef`
+* Built-in TypeScript type predicates
 * No dependencies
 
 ---
@@ -40,6 +41,59 @@ JavaScript type checks are deceptively inconsistent:
 * Guards scattered across codebases lead to inconsistency
 
 NanoTypes centralizes and hardens these checks into a small, predictable surface.
+
+---
+
+## TypeScript vs Runtime Checks
+
+TypeScript is **compile-time**.
+NanoTypes is **runtime**.
+
+They solve different problems.
+
+### What TypeScript Does Well
+
+* Prevents incorrect usage during development
+* Provides IDE autocomplete and static analysis
+* Catches type mismatches before build
+
+### What TypeScript Cannot Guarantee
+
+At runtime, TypeScript types disappear. Values coming from:
+
+* API responses
+* `JSON.parse`
+* User input
+* `localStorage`
+* Environment variables
+* Third-party libraries
+
+may not match their declared types.
+
+NanoTypes validates those values **at runtime**.
+
+### They Work Together
+
+NanoTypes guards are typed as proper **type predicates**:
+
+```ts
+if (is.string(x)) {
+  // x is now narrowed to string
+}
+
+assertType.numberSafe(x);
+// x is guaranteed to be a non-NaN number here
+```
+
+This means:
+
+* IDEs narrow types correctly
+* Fewer `as` casts
+* Fewer `@ts-ignore` comments
+* Safer boundary validation
+
+> TypeScript tells you what *should* be true.
+> NanoTypes checks what *is* true.
 
 ---
 
@@ -149,8 +203,8 @@ Some guards may only exist when the constructor exists in that environment
 | `is.negativeNumber(x)`            | Less than 0                              |
 | `is.integer(x)`                   | Whole number                             |
 | `is.finite(x)`                    | Not `Infinity`, not `NaN`                |
-| `is.truthy(x)`                    | Coerces to `true`                        |
-| `is.falsy(x)`                     | Coerces to `false`                       |
+| `is.truthy(x)`                    | Narrowed to non-falsy value              |
+| `is.falsy(x)`                     | Falsy value                              |
 
 > ⚠️ **Note**
 > `is.number(x)` follows standard JavaScript semantics and returns `true` for `NaN`.
