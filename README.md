@@ -5,6 +5,7 @@
 [![bundle size](https://img.shields.io/bundlephobia/minzip/nanotypes)](https://bundlephobia.com/package/nanotypes)
 [![license](https://img.shields.io/npm/l/nanotypes)](https://github.com/iWhatty/nanotypes/blob/main/LICENSE)
 [![stars](https://img.shields.io/github/stars/iWhatty/nanotypes?style=social)](https://github.com/iWhatty/nanotypes)
+[![types](https://img.shields.io/npm/types/nanotypes)](https://www.npmjs.com/package/nanotypes)
 
 Minimal, runtime-safe type guards for modern JavaScript. Two surfaces, same package: an ergonomic `is` namespace, plus per-guard named exports that tree-shake to ~600 bytes gzipped for a single guard. Zero dependencies.
 
